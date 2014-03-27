@@ -18,6 +18,7 @@ public class AquibirdRings extends Sprite {
   private var _Content:MovieClip;
   private var main:MovieClip;
   private var relativeDeltaHeight:Number;
+
   public function AquibirdRings() {
     stage.align = StageAlign.TOP_LEFT;
     addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
@@ -45,16 +46,14 @@ public class AquibirdRings extends Sprite {
   private function onAddedToStage(event:Event):void {
     stageLoader = new Loader();
     stageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
-    stageLoader.load(new URLRequest("./AquibirdRingtoneVersion1.0.swf"));
-
+    stageLoader.load(new URLRequest("./AquibirdRingsVersion1.0.swf"));
   }
 
   private function onComplete(event:Event):void {
     stageLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, onComplete);
     _Content = MovieClip(event.currentTarget.content);
-    trace(_Content);
     addChild(_Content);
-    _Content.visible = false;
+    _Content.visible = true;
 
     /* scale swf - what the ;; */
     _Content.scaleX = 320 / 409;
