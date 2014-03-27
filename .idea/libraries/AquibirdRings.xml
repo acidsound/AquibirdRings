@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="AquibirdRings" type="flex">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/assets/AquibirdRingtoneVersion1.0.swc!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
