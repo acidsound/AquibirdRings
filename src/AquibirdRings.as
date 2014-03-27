@@ -61,7 +61,7 @@ public class AquibirdRings extends Sprite {
     _Content.stopAllMovieClips();
 
     main = _Content.Main;
-    relativeDeltaHeight = (main.Background.width / stage.fullScreenWidth * stage.fullScreenHeight) - main.Background.height;
+    relativeDeltaHeight = (main.BackgroundBox.width / stage.fullScreenWidth * stage.fullScreenHeight) - main.BackgroundBox.height;
     main.SongFrame.y += relativeDeltaHeight;
     main.ButtonFrame.y += relativeDeltaHeight;
   }
