@@ -19,6 +19,13 @@ public class AquibirdRings extends Sprite {
   private var main:MovieClip;
   private var relativeDeltaHeight:Number;
 
+  public var BackgroundBox;
+  public var ButtonBox;
+  public var SongBox;
+  public var HelpBox;
+  public var DownloadBox;
+
+
   public function AquibirdRings() {
     stage.align = StageAlign.TOP_LEFT;
     addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
