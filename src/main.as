@@ -8,27 +8,23 @@ import flash.display.Sprite;
 import flash.display.StageAlign;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
-import flash.events.ProgressEvent;
 import flash.net.URLRequest;
 import flash.system.Capabilities;
 import flash.ui.Keyboard;
 
-public class AquibirdRings extends Sprite {
+[SWF(backgroundColor="0x000000", scaleMode="noScale", quality=1)]
+public class main extends Sprite {
   private var stageLoader:Loader;
-  private var _Content:MovieClip;
-  private var main:MovieClip;
+  public var _Content:MovieClip;
   private var relativeDeltaHeight:Number;
 
-  public var BackgroundBox;
-  public var ButtonBox;
-  public var SongBox;
-  public var HelpBox;
-  public var DownloadBox;
-
-
-  public function AquibirdRings() {
+  public function main() {
     stage.align = StageAlign.TOP_LEFT;
+
     addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+
+    NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.KEEP_AWAKE;
+
     /* set Android Exit Handler */
     if (Capabilities.cpuArchitecture == "ARM") {
       NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, handleActivate, false, 0, true);
@@ -51,9 +47,11 @@ public class AquibirdRings extends Sprite {
   }
 
   private function onAddedToStage(event:Event):void {
+    removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+
     stageLoader = new Loader();
     stageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
-    stageLoader.load(new URLRequest("./AquibirdRingsVersion1.0.swf"));
+    stageLoader.load(new URLRequest("AquibirdRingsVersion1.0.swf"));
   }
 
   private function onComplete(event:Event):void {
@@ -67,10 +65,10 @@ public class AquibirdRings extends Sprite {
     _Content.scaleY = 320 / 409;
     _Content.stopAllMovieClips();
 
-    main = _Content.Main;
+    var main = _Content.Main;
     relativeDeltaHeight = (main.BackgroundBox.width / stage.fullScreenWidth * stage.fullScreenHeight) - main.BackgroundBox.height;
-    main.SongFrame.y += relativeDeltaHeight;
-    main.ButtonFrame.y += relativeDeltaHeight;
+    main.SongBox.y += relativeDeltaHeight;
+    main.ButtonBox.y += relativeDeltaHeight;
   }
 }
 }
