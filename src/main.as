@@ -26,6 +26,7 @@ public class main extends Sprite {
   private var soundLoader:Sound;
   private var playStatus:Boolean=false;
   private var soundChannel:SoundChannel;
+  private var SongBox:MovieClip;
 
   public function main() {
     stage.align = StageAlign.TOP_LEFT;
@@ -79,6 +80,7 @@ public class main extends Sprite {
     c.SongBox.y += relativeDeltaHeight;
     c.ButtonBox.y += relativeDeltaHeight;
 
+    SongBox = MovieClip(c.SongBox);
     attachEvents();
   }
 
@@ -89,7 +91,6 @@ public class main extends Sprite {
     _Content.visible = true;
 //    soundLoader = new Sound(new URLRequest("./mp3_128/01_My Name.mp3"));
 //    playCurrentTrack();
-    trace(c.SongBox.SongInfo);
 
     // transport
     MovieClip(c.ButtonBox.PlayButton).addEventListener(MouseEvent.CLICK, onPlayButtonClick);
@@ -105,12 +106,27 @@ public class main extends Sprite {
     );
   }
 
+  private function onFlySongInfo(event:Event):void {
+    if (event.currentTarget.currentLabel==="StopL" || event.currentTarget.currentLabel==="StopR") {
+      SongBox.stop();
+      SongBox.removeEventListener(Event.ENTER_FRAME, onFlySongInfo);
+    }
+  }
+
   private function onLeftButtonClick(event:MouseEvent):void {
-    trace("Left Button Clicked");
+    SongBox.gotoAndPlay("FlyLeft");
+    if (SongBox.hasEventListener(Event.ENTER_FRAME)) {
+      SongBox.removeEventListener(Event.ENTER_FRAME, onFlySongInfo);
+    }
+    SongBox.addEventListener(Event.ENTER_FRAME, onFlySongInfo);
   }
 
   private function onRightButtonClick(event:MouseEvent):void {
-    trace("Right Button Clicked");
+    SongBox.gotoAndPlay("FlyRight");
+    if (SongBox.hasEventListener(Event.ENTER_FRAME)) {
+      SongBox.removeEventListener(Event.ENTER_FRAME, onFlySongInfo);
+    }
+    SongBox.addEventListener(Event.ENTER_FRAME, onFlySongInfo);
   }
 
   private function onHelpButtonClick(event:MouseEvent):void {
