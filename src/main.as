@@ -84,6 +84,7 @@ public class main extends Sprite {
 
     SongBox = MovieClip(c.SongBox);
     HelpBox = MovieClip(c.HelpBox);
+    HelpBox.HelpMessage.gotoAndStop((Capabilities.cpuArchitecture == "ARM") && "HelpMessageAndroid" || "HelpMessageiOS");
     DownloadBox = MovieClip(c.DownloadBox);
     attachEvents();
   }
