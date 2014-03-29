@@ -8,6 +8,7 @@ import flash.display.Sprite;
 import flash.display.StageAlign;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
+import flash.events.MouseEvent;
 import flash.filesystem.File;
 import flash.media.Sound;
 import flash.media.SoundChannel;
@@ -86,9 +87,40 @@ public class main extends Sprite {
 //    songFiles = File.applicationDirectory.resolvePath("./mp3_128/").getDirectoryListing();
 //    c.SongBox.SongInfo.SongTitleLeft = songFiles[0]
     _Content.visible = true;
-    soundLoader = new Sound(new URLRequest("./mp3_128/01_My Name.mp3"));
-    playCurrentTrack();
+//    soundLoader = new Sound(new URLRequest("./mp3_128/01_My Name.mp3"));
+//    playCurrentTrack();
+    trace(c.SongBox.SongInfo);
+
+    // transport
+    MovieClip(c.ButtonBox.PlayButton).addEventListener(MouseEvent.CLICK, onPlayButtonClick);
+    MovieClip(c.ButtonBox.LeftButton).addEventListener(MouseEvent.CLICK, onLeftButtonClick);
+    MovieClip(c.ButtonBox.RightButton).addEventListener(MouseEvent.CLICK, onRightButtonClick);
+    MovieClip(c.ButtonBox.HelpButton).addEventListener(MouseEvent.CLICK, onHelpButtonClick);
+    MovieClip(c.ButtonBox.DownloadButton).addEventListener(MouseEvent.CLICK, onDownloadButtonClick);
   }
+
+  private function onPlayButtonClick(event:MouseEvent):void {
+    MovieClip(c.ButtonBox.PlayButton).gotoAndStop(
+      MovieClip(c.ButtonBox.PlayButton).currentLabel === "Play" && "Pause" || "Play"
+    );
+  }
+
+  private function onLeftButtonClick(event:MouseEvent):void {
+    trace("Left Button Clicked");
+  }
+
+  private function onRightButtonClick(event:MouseEvent):void {
+    trace("Right Button Clicked");
+  }
+
+  private function onHelpButtonClick(event:MouseEvent):void {
+    trace("Help Button Clicked");
+  }
+
+  private function onDownloadButtonClick(event:MouseEvent):void {
+    trace("Download Button Clicked");
+  }
+
   private function playCurrentTrack():void {
     if (playStatus) {
       soundChannel.stop();
