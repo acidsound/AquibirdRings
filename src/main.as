@@ -8,6 +8,9 @@ import flash.display.Sprite;
 import flash.display.StageAlign;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
+import flash.filesystem.File;
+import flash.media.Sound;
+import flash.media.SoundChannel;
 import flash.net.URLRequest;
 import flash.system.Capabilities;
 import flash.ui.Keyboard;
@@ -17,6 +20,11 @@ public class main extends Sprite {
   private var stageLoader:Loader;
   public var _Content:MovieClip;
   private var relativeDeltaHeight:Number;
+  private var c:MovieClip;
+  private var songFiles:Array;
+  private var soundLoader:Sound;
+  private var playStatus:Boolean=false;
+  private var soundChannel:SoundChannel;
 
   public function main() {
     stage.align = StageAlign.TOP_LEFT;
@@ -58,17 +66,51 @@ public class main extends Sprite {
     stageLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, onComplete);
     _Content = MovieClip(event.currentTarget.content);
     addChild(_Content);
-    _Content.visible = true;
+    _Content.visible = false;
 
     /* scale swf - what the ;; */
     _Content.scaleX = 320 / 409;
     _Content.scaleY = 320 / 409;
     _Content.stopAllMovieClips();
 
-    var main = _Content.Main;
-    relativeDeltaHeight = (main.BackgroundBox.width / stage.fullScreenWidth * stage.fullScreenHeight) - main.BackgroundBox.height;
-    main.SongBox.y += relativeDeltaHeight;
-    main.ButtonBox.y += relativeDeltaHeight;
+    c = _Content.Main;
+    relativeDeltaHeight = (c.BackgroundBox.width / stage.fullScreenWidth * stage.fullScreenHeight) - c.BackgroundBox.height;
+    c.SongBox.y += relativeDeltaHeight;
+    c.ButtonBox.y += relativeDeltaHeight;
+
+    attachEvents();
   }
+
+  private function attachEvents():void {
+//    trace(File.applicationStorageDirectory.resolvePath("data/filename.dat").exists))
+//    songFiles = File.applicationDirectory.resolvePath("./mp3_128/").getDirectoryListing();
+//    c.SongBox.SongInfo.SongTitleLeft = songFiles[0]
+    _Content.visible = true;
+    soundLoader = new Sound(new URLRequest("./mp3_128/01_My Name.mp3"));
+    playCurrentTrack();
+  }
+  private function playCurrentTrack():void {
+    if (playStatus) {
+      soundChannel.stop();
+      soundChannel = soundLoader.play(0);
+      soundChannel.addEventListener(Event.SOUND_COMPLETE, onSoundComplete);
+    } else {
+      soundChannel.stop();
+    }
+  }
+
+  private function pauseCurrentTrack():void {
+    soundChannel.stop();
+  }
+
+  private function onSoundComplete(e:Event):void {
+    playStatus = false;
+    setPlayStatus();
+  }
+
+  private function setPlayStatus():void {
+
+  }
+
 }
 }
