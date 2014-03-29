@@ -17,6 +17,7 @@
           <files-to-package>
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/assets/AquibirdRingsVersion1.0.swf" path-in-package="AquibirdRingsVersion1.0.swf" />
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/mp3_128" path-in-package="mp3_128" />
+            <FilePathAndPathInPackage file-path="$MODULE_DIR$/assets/AppIcon" path-in-package="AppIcon" />
           </files-to-package>
         </packaging-android>
         <packaging-ios enabled="true" use-generated-descriptor="false" custom-descriptor-path="$MODULE_DIR$/main-app.xml" package-file-name="AquibirdRings">
@@ -24,6 +25,7 @@
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/assets/AquibirdRingsVersion1.0.swf" path-in-package="AquibirdRingsVersion1.0.swf" />
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/mp3_128" path-in-package="mp3_128" />
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/Default-568h@2x.png" path-in-package="Default-568h@2x.png" />
+            <FilePathAndPathInPackage file-path="$MODULE_DIR$/assets/AppIcon" path-in-package="AppIcon" />
           </files-to-package>
           <AirSigningOptions keystore-path="$MODULE_DIR$/../../iOS/Certificate.p12" provisioning-profile-path="$MODULE_DIR$/../../iOS/DevWildCardProvisioning.mobileprovision" />
         </packaging-ios>
