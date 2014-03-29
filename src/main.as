@@ -27,6 +27,8 @@ public class main extends Sprite {
   private var playStatus:Boolean=false;
   private var soundChannel:SoundChannel;
   private var SongBox:MovieClip;
+  private var HelpBox:MovieClip;
+  private var DownloadBox:MovieClip;
 
   public function main() {
     stage.align = StageAlign.TOP_LEFT;
@@ -81,6 +83,8 @@ public class main extends Sprite {
     c.ButtonBox.y += relativeDeltaHeight;
 
     SongBox = MovieClip(c.SongBox);
+    HelpBox = MovieClip(c.HelpBox);
+    DownloadBox = MovieClip(c.DownloadBox);
     attachEvents();
   }
 
@@ -106,35 +110,63 @@ public class main extends Sprite {
     );
   }
 
-  private function onFlySongInfo(event:Event):void {
+  private function onFlyFrame(event:Event):void {
     if (event.currentTarget.currentLabel==="StopL" || event.currentTarget.currentLabel==="StopR") {
       SongBox.stop();
-      SongBox.removeEventListener(Event.ENTER_FRAME, onFlySongInfo);
+      SongBox.removeEventListener(Event.ENTER_FRAME, onFlyFrame);
     }
+  }
+
+  private function resetEventListener(object:MovieClip, event:String, callBack:Function):void {
+    if (object.hasEventListener(event)) {
+      object.removeEventListener(event, callBack);
+    }
+    object.addEventListener(event, callBack);
   }
 
   private function onLeftButtonClick(event:MouseEvent):void {
     SongBox.gotoAndPlay("FlyLeft");
-    if (SongBox.hasEventListener(Event.ENTER_FRAME)) {
-      SongBox.removeEventListener(Event.ENTER_FRAME, onFlySongInfo);
-    }
-    SongBox.addEventListener(Event.ENTER_FRAME, onFlySongInfo);
+    resetEventListener(SongBox, Event.ENTER_FRAME, onFlyFrame);
   }
 
   private function onRightButtonClick(event:MouseEvent):void {
     SongBox.gotoAndPlay("FlyRight");
-    if (SongBox.hasEventListener(Event.ENTER_FRAME)) {
-      SongBox.removeEventListener(Event.ENTER_FRAME, onFlySongInfo);
-    }
-    SongBox.addEventListener(Event.ENTER_FRAME, onFlySongInfo);
+    resetEventListener(SongBox, Event.ENTER_FRAME, onFlyFrame);
   }
 
   private function onHelpButtonClick(event:MouseEvent):void {
-    trace("Help Button Clicked");
+    if (HelpBox.currentFrame>1) {
+      onHelpClose(event);
+    } else {
+      HelpBox.gotoAndPlay(0);
+      HelpBox.addEventListener(MouseEvent.CLICK, onHelpClose);
+      resetEventListener(HelpBox, Event.ENTER_FRAME, onHelpFrame);
+    }
+  }
+
+  private function onHelpClose(event:MouseEvent):void {
+    HelpBox.gotoAndStop(0);
+    HelpBox.removeEventListener(MouseEvent.CLICK, onHelpClose);
+  }
+
+  private function onHelpFrame(event:Event):void {
+    if (event.currentTarget.currentFrame === event.currentTarget.totalFrames) {
+      event.currentTarget.stop();
+      event.currentTarget.removeEventListener(Event.ENTER_FRAME, onHelpFrame);
+    }
   }
 
   private function onDownloadButtonClick(event:MouseEvent):void {
-    trace("Download Button Clicked");
+    /* Do Something */
+    DownloadBox.gotoAndPlay(0);
+    resetEventListener(DownloadBox, Event.ENTER_FRAME, onDownloadFrame);
+  }
+
+  private function onDownloadFrame(event:Event):void {
+    if (event.currentTarget.currentFrame === event.currentTarget.totalFrames) {
+      event.currentTarget.stop();
+      event.currentTarget.removeEventListener(Event.ENTER_FRAME, onHelpFrame);
+    }
   }
 
   private function playCurrentTrack():void {
