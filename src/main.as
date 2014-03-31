@@ -24,11 +24,12 @@ public class main extends Sprite {
   private var c:MovieClip;
   private var songFiles:Array;
   private var soundLoader:Sound;
-  private var playStatus:Boolean=false;
   private var soundChannel:SoundChannel;
   private var SongBox:MovieClip;
   private var HelpBox:MovieClip;
   private var DownloadBox:MovieClip;
+  private var ButtonBox:MovieClip;
+  private var idx:int=0;
 
   public function main() {
     stage.align = StageAlign.TOP_LEFT;
@@ -79,36 +80,57 @@ public class main extends Sprite {
 
     c = _Content.Main;
     relativeDeltaHeight = (c.BackgroundBox.width / stage.fullScreenWidth * stage.fullScreenHeight) - c.BackgroundBox.height;
-    c.SongBox.y += relativeDeltaHeight;
-    c.ButtonBox.y += relativeDeltaHeight;
 
     SongBox = MovieClip(c.SongBox);
     HelpBox = MovieClip(c.HelpBox);
-    HelpBox.HelpMessage.gotoAndStop((Capabilities.cpuArchitecture == "ARM") && "HelpMessageAndroid" || "HelpMessageiOS");
+    ButtonBox = MovieClip(c.ButtonBox);
     DownloadBox = MovieClip(c.DownloadBox);
+
+    SongBox.y += relativeDeltaHeight;
+    ButtonBox.y += relativeDeltaHeight;
+
+    HelpBox.HelpMessage.gotoAndStop((Capabilities.cpuArchitecture == "ARM") && "HelpMessageAndroid" || "HelpMessageiOS");
     attachEvents();
   }
 
-  private function attachEvents():void {
-//    trace(File.applicationStorageDirectory.resolvePath("data/filename.dat").exists))
-//    songFiles = File.applicationDirectory.resolvePath("./mp3_128/").getDirectoryListing();
-//    c.SongBox.SongInfo.SongTitleLeft = songFiles[0]
-    _Content.visible = true;
-//    soundLoader = new Sound(new URLRequest("./mp3_128/01_My Name.mp3"));
-//    playCurrentTrack();
+  private function sortAscendingByName(a:*, b:*):int {
+    return a.name< b.name ? -1 : a.name> b.name ? 1 : 0;
+  }
 
+  private function attachEvents():void {
+    songFiles = File.applicationDirectory.resolvePath("./mp3_128/").getDirectoryListing().sort(sortAscendingByName);
+    SongBox.SongInfo.SongTitleRight.text = songFiles[idx].name.replace("_", " ").replace(".mp3", "");
+
+    _Content.visible = true;
+
+    loadSound(idx);
     // transport
-    MovieClip(c.ButtonBox.PlayButton).addEventListener(MouseEvent.CLICK, onPlayButtonClick);
-    MovieClip(c.ButtonBox.LeftButton).addEventListener(MouseEvent.CLICK, onLeftButtonClick);
-    MovieClip(c.ButtonBox.RightButton).addEventListener(MouseEvent.CLICK, onRightButtonClick);
-    MovieClip(c.ButtonBox.HelpButton).addEventListener(MouseEvent.CLICK, onHelpButtonClick);
-    MovieClip(c.ButtonBox.DownloadButton).addEventListener(MouseEvent.CLICK, onDownloadButtonClick);
+    ButtonBox.PlayButton.addEventListener(MouseEvent.CLICK, onPlayButtonClick);
+    ButtonBox.LeftButton.addEventListener(MouseEvent.CLICK, onLeftButtonClick);
+    ButtonBox.RightButton.addEventListener(MouseEvent.CLICK, onRightButtonClick);
+    ButtonBox.HelpButton.addEventListener(MouseEvent.CLICK, onHelpButtonClick);
+    ButtonBox.DownloadButton.addEventListener(MouseEvent.CLICK, onDownloadButtonClick);
+  }
+
+  private function loadSound(i:int):void {
+    soundLoader = new Sound(new URLRequest("./mp3_128/" + songFiles[i].name));
   }
 
   private function onPlayButtonClick(event:MouseEvent):void {
-    MovieClip(c.ButtonBox.PlayButton).gotoAndStop(
-      MovieClip(c.ButtonBox.PlayButton).currentLabel === "Play" && "Pause" || "Play"
+    var playStatus:String = ButtonBox.PlayButton.currentLabel;
+    ButtonBox.PlayButton.gotoAndStop(
+      playStatus === "Play" && "Pause" || "Play"
     );
+    if (playStatus === "Play") {
+      soundChannel = soundLoader.play(0);
+      soundChannel.addEventListener(Event.SOUND_COMPLETE, onSoundComplete);
+    } else {
+      soundChannel.stop();
+    }
+  }
+
+  private function onSoundComplete(e:Event):void {
+    ButtonBox.PlayButton.gotoAndStop("Play");
   }
 
   private function onFlyFrame(event:Event):void {
@@ -126,12 +148,20 @@ public class main extends Sprite {
   }
 
   private function onLeftButtonClick(event:MouseEvent):void {
-    SongBox.gotoAndPlay("FlyLeft");
+    SongBox.gotoAndPlay("FlyRight");
+    SongBox.SongInfo.SongTitleRight.text = songFiles[idx].name.replace("_", " ").replace(".mp3", "");
+    idx = idx>0 ? idx-1 : songFiles.length-1;
+    loadSound(idx);
+    SongBox.SongInfo.SongTitleLeft.text = songFiles[idx].name.replace("_", " ").replace(".mp3", "");
     resetEventListener(SongBox, Event.ENTER_FRAME, onFlyFrame);
   }
 
   private function onRightButtonClick(event:MouseEvent):void {
-    SongBox.gotoAndPlay("FlyRight");
+    SongBox.gotoAndPlay("FlyLeft");
+    SongBox.SongInfo.SongTitleLeft.text = songFiles[idx].name.replace("_", " ").replace(".mp3", "");
+    idx = idx<songFiles.length-1 ? idx+1 : 0;
+    loadSound(idx);
+    SongBox.SongInfo.SongTitleRight.text = songFiles[idx].name.replace("_", " ").replace(".mp3", "");
     resetEventListener(SongBox, Event.ENTER_FRAME, onFlyFrame);
   }
 
@@ -159,6 +189,28 @@ public class main extends Sprite {
 
   private function onDownloadButtonClick(event:MouseEvent):void {
     /* Do Something */
+    var source:File;
+    var target:File;
+    try {
+      var currentFileName:String = songFiles[idx].name.replace('.mp3', '');
+      if (Capabilities.os.indexOf("iPhone") < 0) {
+        // android
+        source = File.applicationDirectory.resolvePath("./mp3_128/" + currentFileName + ".mp3");
+        if (File.documentsDirectory.resolvePath("./media/audio/ringtones/").exists) {
+          target = File.documentsDirectory.resolvePath("./media/audio/ringtones/" + currentFileName + ".mp3");
+        } else {
+          target = File.documentsDirectory.resolvePath("./Ringtones/" + currentFileName + ".mp3");
+        }
+        source.copyTo(target, true);
+      } else {
+        // iOS
+        source = File.applicationDirectory.resolvePath("./m4r_128/" + currentFileName + ".m4a");
+        target = File.documentsDirectory.resolvePath(currentFileName + ".m4r");
+        source.copyTo(target, true);
+      }
+    } catch (error:Error) {
+    }
+
     DownloadBox.gotoAndPlay(0);
     resetEventListener(DownloadBox, Event.ENTER_FRAME, onDownloadFrame);
   }
@@ -168,29 +220,6 @@ public class main extends Sprite {
       event.currentTarget.stop();
       event.currentTarget.removeEventListener(Event.ENTER_FRAME, onHelpFrame);
     }
-  }
-
-  private function playCurrentTrack():void {
-    if (playStatus) {
-      soundChannel.stop();
-      soundChannel = soundLoader.play(0);
-      soundChannel.addEventListener(Event.SOUND_COMPLETE, onSoundComplete);
-    } else {
-      soundChannel.stop();
-    }
-  }
-
-  private function pauseCurrentTrack():void {
-    soundChannel.stop();
-  }
-
-  private function onSoundComplete(e:Event):void {
-    playStatus = false;
-    setPlayStatus();
-  }
-
-  private function setPlayStatus():void {
-
   }
 
 }

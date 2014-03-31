@@ -17,7 +17,6 @@
           <files-to-package>
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/assets/AquibirdRingsVersion1.0.swf" path-in-package="AquibirdRingsVersion1.0.swf" />
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/mp3_128" path-in-package="mp3_128" />
-            <FilePathAndPathInPackage file-path="$MODULE_DIR$/assets/AppIcon" path-in-package="AppIcon" />
           </files-to-package>
         </packaging-android>
         <packaging-ios enabled="true" use-generated-descriptor="false" custom-descriptor-path="$MODULE_DIR$/main-app.xml" package-file-name="AquibirdRings">
@@ -25,9 +24,10 @@
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/assets/AquibirdRingsVersion1.0.swf" path-in-package="AquibirdRingsVersion1.0.swf" />
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/mp3_128" path-in-package="mp3_128" />
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/Default-568h@2x.png" path-in-package="Default-568h@2x.png" />
+            <FilePathAndPathInPackage file-path="$MODULE_DIR$/m4r_128" path-in-package="m4r_128" />
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/assets/AppIcon" path-in-package="AppIcon" />
           </files-to-package>
-          <AirSigningOptions keystore-path="$MODULE_DIR$/../../iOS/Certificate.p12" provisioning-profile-path="$MODULE_DIR$/../../iOS/DevWildCardProvisioning.mobileprovision" />
+          <AirSigningOptions keystore-path="$MODULE_DIR$/../../iOS/CertificateDistribute.p12" provisioning-profile-path="$MODULE_DIR$/../../iOS/AquibirdRingDist.mobileprovision" />
         </packaging-ios>
       </configuration>
     </configurations>
@@ -37,7 +37,6 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/assets" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="AIR13.0" jdkType="Flex SDK Type (new)" />
     <orderEntry type="sourceFolder" forTests="false" />
