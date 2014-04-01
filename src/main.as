@@ -39,7 +39,7 @@ public class main extends Sprite {
     NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.KEEP_AWAKE;
 
     /* set Android Exit Handler */
-    if (Capabilities.cpuArchitecture == "ARM") {
+    if (Capabilities.manufacturer==="Android Linux") {
       NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, handleActivate, false, 0, true);
       NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, handleDeactivate, false, 0, true);
       NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, handleKeys, false, 0, true);
@@ -89,7 +89,7 @@ public class main extends Sprite {
     SongBox.y += relativeDeltaHeight;
     ButtonBox.y += relativeDeltaHeight;
 
-    HelpBox.HelpMessage.gotoAndStop((Capabilities.cpuArchitecture == "ARM") && "HelpMessageAndroid" || "HelpMessageiOS");
+    HelpBox.HelpMessage.gotoAndStop((Capabilities.manufacturer==="Adobe iOS") ? "HelpMessageiOS" : "HelpMessageAndroid");
     attachEvents();
   }
 
@@ -193,7 +193,7 @@ public class main extends Sprite {
     var target:File;
     try {
       var currentFileName:String = songFiles[idx].name.replace('.mp3', '');
-      if (Capabilities.os.indexOf("iPhone") < 0) {
+      if (Capabilities.manufacturer!=="Adobe iOS") {
         // android
         source = File.applicationDirectory.resolvePath("./mp3_128/" + currentFileName + ".mp3");
         if (File.documentsDirectory.resolvePath("./media/audio/ringtones/").exists) {
@@ -203,7 +203,6 @@ public class main extends Sprite {
         }
         source.copyTo(target, true);
       } else {
-        // iOS
         source = File.applicationDirectory.resolvePath("./m4r_128/" + currentFileName + ".m4a");
         target = File.documentsDirectory.resolvePath(currentFileName + ".m4r");
         source.copyTo(target, true);
