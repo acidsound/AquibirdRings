@@ -44,6 +44,18 @@ public class main extends Sprite {
       NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, handleDeactivate, false, 0, true);
       NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, handleKeys, false, 0, true);
     }
+
+    /* integrate test flights */
+    NativeApplication.nativeApplication.addEventListener( Event.ACTIVATE, handleActivateApp );
+  }
+
+  private function handleActivateApp(event:Event):void {
+    NativeApplication.nativeApplication.removeEventListener( Event.ACTIVATE, handleActivateApp );
+    loadTestFlight();
+  }
+
+  private function loadTestFlight():void {
+    // testflight stuff
   }
 
   private static function handleActivate(event:Event):void {

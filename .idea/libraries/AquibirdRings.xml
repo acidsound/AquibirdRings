@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="AquibirdRings" type="flex">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/assets/AquibirdRingsVersion1.0.swc!/" />
+      <root url="jar://$PROJECT_DIR$/lib/betatesting.ane!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
