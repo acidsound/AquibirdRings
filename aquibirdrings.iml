@@ -28,7 +28,7 @@
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/m4r_128" path-in-package="m4r_128" />
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/assets/AppIcon" path-in-package="AppIcon" />
           </files-to-package>
-          <AirSigningOptions keystore-path="$MODULE_DIR$/../../iOS/Certificate.p12" provisioning-profile-path="$MODULE_DIR$/../../iOS/DevWildCardProvisioning.mobileprovision" />
+          <AirSigningOptions keystore-path="$MODULE_DIR$/../../iOS/CertificateDistribute.p12" provisioning-profile-path="$MODULE_DIR$/../../iOS/AquibirdRingDist.mobileprovision" />
         </packaging-ios>
       </configuration>
     </configurations>
