@@ -124,25 +124,27 @@ public class main extends Sprite {
     ButtonBox.DownloadButton.addEventListener(MouseEvent.CLICK, onDownloadButtonClick);
   }
 
-  private function loadSound(i:int):void {
-    soundLoader = new Sound(new URLRequest("./mp3_128/" + songFiles[i].name));
-  }
-
   private function onPlayButtonClick(event:MouseEvent):void {
     var playStatus:String = ButtonBox.PlayButton.currentLabel;
     ButtonBox.PlayButton.gotoAndStop(
       playStatus === "Play" && "Pause" || "Play"
     );
     if (playStatus === "Play") {
-      soundChannel = soundLoader.play(0);
-      soundChannel.addEventListener(Event.SOUND_COMPLETE, onSoundComplete);
+      playCurrentSound();
     } else {
       soundChannel.stop();
     }
   }
 
+  private function playCurrentSound():void {
+    soundChannel = soundLoader.play(0, int.MAX_VALUE );
+//    soundChannel.addEventListener(Event.SOUND_COMPLETE, onSoundComplete);
+  }
+
   private function onSoundComplete(e:Event):void {
-    ButtonBox.PlayButton.gotoAndStop("Play");
+//    ButtonBox.PlayButton.gotoAndStop("Play");
+//    soundChannel.removeEventListener(Event.SOUND_COMPLETE, onSoundComplete);
+//    playCurrentSound();
   }
 
   private function onFlyFrame(event:Event):void {
@@ -159,13 +161,21 @@ public class main extends Sprite {
     object.addEventListener(event, callBack);
   }
 
+  private function loadSound(i:int):void {
+    soundLoader = new Sound(new URLRequest("./mp3_128/" + songFiles[i].name));
+    resetEventListener(SongBox, Event.ENTER_FRAME, onFlyFrame);
+    if (ButtonBox.PlayButton.currentLabel === 'Pause') {
+      soundChannel.stop();
+      playCurrentSound();
+    }
+  }
+
   private function onLeftButtonClick(event:MouseEvent):void {
     SongBox.gotoAndPlay("FlyRight");
     SongBox.SongInfo.SongTitleRight.text = songFiles[idx].name.replace("_", " ").replace(".mp3", "");
     idx = idx>0 ? idx-1 : songFiles.length-1;
     loadSound(idx);
     SongBox.SongInfo.SongTitleLeft.text = songFiles[idx].name.replace("_", " ").replace(".mp3", "");
-    resetEventListener(SongBox, Event.ENTER_FRAME, onFlyFrame);
   }
 
   private function onRightButtonClick(event:MouseEvent):void {
@@ -174,7 +184,6 @@ public class main extends Sprite {
     idx = idx<songFiles.length-1 ? idx+1 : 0;
     loadSound(idx);
     SongBox.SongInfo.SongTitleRight.text = songFiles[idx].name.replace("_", " ").replace(".mp3", "");
-    resetEventListener(SongBox, Event.ENTER_FRAME, onFlyFrame);
   }
 
   private function onHelpButtonClick(event:MouseEvent):void {
